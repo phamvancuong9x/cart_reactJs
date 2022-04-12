@@ -155,15 +155,17 @@ function App() {
   };
   const handleRemove = (idProduct) => {
     let newCart = cartState.cart.filter((value) => {
-      console.log(idProduct);
       return value.id != idProduct;
     });
-    console.log(newCart);
     let total = newCart.reduce((total, current) => {
       total += current.price * current.quantity;
       return total;
     }, 0);
-    let newAmount = newCart.length;
+    let newAmount = newCart.reduce((amount, current) => {
+      amount += current.quantity;
+
+      return amount;
+    }, 0);
 
     setCartState({
       ...cartState,
@@ -183,8 +185,10 @@ function App() {
       total += current.price * current.quantity;
       return total;
     }, 0);
-    let newAmount = newCart.length;
-
+    let newAmount = newCart.reduce((amount, current) => {
+      amount += current.quantity;
+      return amount;
+    }, 0);
     setCartState({
       ...cartState,
       cart: newCart,
