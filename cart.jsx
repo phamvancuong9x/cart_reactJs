@@ -40,9 +40,6 @@ const CountAmount = ({
   handleIncrease,
   handleDecrease,
 }) => {
-  {
-    console.log(quantity);
-  }
   return (
     <div className="detailProduct__quantity-input">
       <span
@@ -81,6 +78,7 @@ const ProductsItem = ({
   quantity,
   handleIncrease,
   handleDecrease,
+  handleRemove,
 }) => {
   return (
     <div className="product_item">
@@ -90,7 +88,9 @@ const ProductsItem = ({
       <div className="product_info">
         <div className="product_name">{name}</div>
         <div className="product_price">{price}</div>
-        <div className="remove_btn">Xoa</div>
+        <div className="remove_btn" onClick={() => handleRemove(idProduct)}>
+          Xoa
+        </div>
       </div>
       <CountAmount
         quantity={quantity}
@@ -101,7 +101,7 @@ const ProductsItem = ({
     </div>
   );
 };
-const Cart = ({ cart, handleIncrease, handleDecrease }) => {
+const Cart = ({ cart, handleIncrease, handleDecrease, handleRemove }) => {
   return (
     <div className="cart">
       {cart.map((value) => {
@@ -115,6 +115,7 @@ const Cart = ({ cart, handleIncrease, handleDecrease }) => {
             quantity={value.quantity}
             handleDecrease={handleDecrease}
             handleIncrease={handleIncrease}
+            handleRemove={handleRemove}
           />
         );
       })}
@@ -152,6 +153,25 @@ function App() {
       total: total,
     });
   };
+  const handleRemove = (idProduct) => {
+    let newCart = cartState.cart.filter((value) => {
+      console.log(idProduct);
+      return value.id != idProduct;
+    });
+    console.log(newCart);
+    let total = newCart.reduce((total, current) => {
+      total += current.price * current.quantity;
+      return total;
+    }, 0);
+    let newAmount = newCart.length;
+
+    setCartState({
+      ...cartState,
+      cart: newCart,
+      amount: newAmount,
+      total: total,
+    });
+  };
   const handleDecrease = (idProduct) => {
     let newCart = cartState.cart.map((value) => {
       if (value.id == idProduct && value.quantity > 1) {
@@ -181,6 +201,7 @@ function App() {
         cart={cartState.cart}
         handleDecrease={handleDecrease}
         handleIncrease={handleIncrease}
+        handleRemove={handleRemove}
       />
       <TotalAmount total={cartState.total} />
     </div>
