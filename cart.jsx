@@ -192,6 +192,9 @@ function App() {
       total: total,
     });
   };
+  const handleRemoveAll = () => {
+    setCartState({ cart: [], amount: 0, total: 0 });
+  };
 
   return (
     <div className="container">
@@ -204,6 +207,7 @@ function App() {
         handleRemove={handleRemove}
       />
       <TotalAmount total={cartState.total} />
+      <button onClick={handleRemoveAll}>Xóa Tất cả</button>
     </div>
   );
 }
