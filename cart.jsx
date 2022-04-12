@@ -40,6 +40,9 @@ const CountAmount = ({
   handleIncrease,
   handleDecrease,
 }) => {
+  {
+    console.log(quantity);
+  }
   return (
     <div className="detailProduct__quantity-input">
       <span
@@ -152,17 +155,14 @@ function App() {
   const handleDecrease = (idProduct) => {
     let newCart = cartState.cart.map((value) => {
       if (value.id == idProduct && value.quantity > 1) {
-        console.log(value.id);
         return { ...value, quantity: value.quantity - 1 };
       }
       return value;
     });
-    console.log(newCart);
     let total = newCart.reduce((total, current) => {
       total += current.price * current.quantity;
       return total;
     }, 0);
-    console.log(total);
     let newAmount = newCart.length;
 
     setCartState({
@@ -178,7 +178,7 @@ function App() {
       <HeaderCart amount={cartState.amount} />
       <h3 className="breadcrumbs__content-title"> GIỎ HÀNG CỦA BẠN</h3>
       <Cart
-        cart={cart}
+        cart={cartState.cart}
         handleDecrease={handleDecrease}
         handleIncrease={handleIncrease}
       />
