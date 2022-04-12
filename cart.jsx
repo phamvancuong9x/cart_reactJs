@@ -131,7 +131,6 @@ function App() {
     amount: amount,
   });
   const handleIncrease = (idProduct) => {
-    console.log(typeof idProduct);
     let newCart = cartState.cart.map((value) => {
       if (value.id == idProduct) {
         return { ...value, quantity: value.quantity + 1 };
@@ -149,9 +148,31 @@ function App() {
       amount: cartState.amount + 1,
       total: total,
     });
-    console.log(cartState);
   };
-  const handleDecrease = ({ id }) => {};
+  const handleDecrease = (idProduct) => {
+    let newCart = cartState.cart.map((value) => {
+      if (value.id == idProduct && value.quantity > 1) {
+        console.log(value.id);
+        return { ...value, quantity: value.quantity - 1 };
+      }
+      return value;
+    });
+    console.log(newCart);
+    let total = newCart.reduce((total, current) => {
+      total += current.price * current.quantity;
+      return total;
+    }, 0);
+    console.log(total);
+    let newAmount = newCart.length;
+
+    setCartState({
+      ...cartState,
+      cart: newCart,
+      amount: newAmount,
+      total: total,
+    });
+  };
+
   return (
     <div className="container">
       <HeaderCart amount={cartState.amount} />
