@@ -10,7 +10,7 @@ const cart = [
     id: 2,
     image: "./image/Vest_LH67_2-2.jpg",
     name: "ÁO VEST KẺ XANH - 263",
-    price: 290000,
+    price: 2900000,
     quantity: 1,
   },
   {
@@ -128,12 +128,35 @@ function App() {
     total += current.price * current.quantity;
     return total;
   }, 0);
-  let amount = cart.length;
+  let amount = cart.reduce((amount, current) => {
+    amount += current.quantity;
+
+    return amount;
+  }, 0);
+
   const [cartState, setCartState] = React.useState({
-    cart: cart,
-    total: total,
-    amount: amount,
+    cart,
+    total,
+    amount,
   });
+  const handleSetState = (cart) => {
+    let newTotal = cart.reduce((total, current) => {
+      total += current.price * current.quantity;
+      return total;
+    }, 0);
+
+    let newAmount = cart.reduce((amount, current) => {
+      amount += current.quantity;
+
+      return amount;
+    }, 0);
+    setCartState({
+      ...cartState,
+      cart: cart,
+      amount: newAmount,
+      total: newTotal,
+    });
+  };
   const handleIncrease = (idProduct) => {
     let newCart = cartState.cart.map((value) => {
       if (value.id == idProduct) {
@@ -142,37 +165,13 @@ function App() {
       return value;
     });
 
-    let total = newCart.reduce((total, current) => {
-      total += current.price * current.quantity;
-      return total;
-    }, 0);
-    setCartState({
-      ...cartState,
-      cart: newCart,
-      amount: cartState.amount + 1,
-      total: total,
-    });
+    handleSetState(newCart);
   };
   const handleRemove = (idProduct) => {
     let newCart = cartState.cart.filter((value) => {
       return value.id != idProduct;
     });
-    let total = newCart.reduce((total, current) => {
-      total += current.price * current.quantity;
-      return total;
-    }, 0);
-    let newAmount = newCart.reduce((amount, current) => {
-      amount += current.quantity;
-
-      return amount;
-    }, 0);
-
-    setCartState({
-      ...cartState,
-      cart: newCart,
-      amount: newAmount,
-      total: total,
-    });
+    handleSetState(newCart);
   };
   const handleDecrease = (idProduct) => {
     let newCart = cartState.cart.map((value) => {
@@ -181,25 +180,11 @@ function App() {
       }
       return value;
     });
-    let total = newCart.reduce((total, current) => {
-      total += current.price * current.quantity;
-      return total;
-    }, 0);
-    let newAmount = newCart.reduce((amount, current) => {
-      amount += current.quantity;
-      return amount;
-    }, 0);
-    setCartState({
-      ...cartState,
-      cart: newCart,
-      amount: newAmount,
-      total: total,
-    });
+    handleSetState(newCart);
   };
   const handleRemoveAll = () => {
     setCartState({ cart: [], amount: 0, total: 0 });
   };
-
   return (
     <div className="container">
       <HeaderCart amount={cartState.amount} />
@@ -210,8 +195,14 @@ function App() {
         handleIncrease={handleIncrease}
         handleRemove={handleRemove}
       />
-      <TotalAmount total={cartState.total} />
-      <button onClick={handleRemoveAll}>Xóa Tất cả</button>
+      {cartState.cart.length == 0 ? (
+        <h2>không có sản phẩm !</h2>
+      ) : (
+        <React.Fragment>
+          <TotalAmount total={cartState.total} />
+          <button onClick={handleRemoveAll}>Xóa Tất cả</button>
+        </React.Fragment>
+      )}
     </div>
   );
 }
