@@ -124,21 +124,27 @@ const Cart = ({ cart, handleIncrease, handleDecrease, handleRemove }) => {
 };
 
 function App() {
-  let total = cart.reduce((total, current) => {
-    total += current.price * current.quantity;
-    return total;
-  }, 0);
-  let amount = cart.reduce((amount, current) => {
-    amount += current.quantity;
-
-    return amount;
-  }, 0);
-
   const [cartState, setCartState] = React.useState({
-    cart,
-    total,
-    amount,
+    cart: [],
+    total: 0,
+    amount: 0,
   });
+  React.useEffect(() => {
+    let total = cart.reduce((total, current) => {
+      total += current.price * current.quantity;
+      return total;
+    }, 0);
+    let amount = cart.reduce((amount, current) => {
+      amount += current.quantity;
+      console.log(amount);
+      return amount;
+    }, 0);
+    setCartState({
+      cart,
+      total,
+      amount,
+    });
+  }, []);
   const handleSetState = (cart) => {
     let newTotal = cart.reduce((total, current) => {
       total += current.price * current.quantity;
