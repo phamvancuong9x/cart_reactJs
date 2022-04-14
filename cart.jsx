@@ -202,11 +202,15 @@ function App() {
         handleRemove={handleRemove}
       />
       {cartState.cart.length == 0 ? (
-        <h2>không có sản phẩm !</h2>
+        <h3>không có sản phẩm !</h3>
       ) : (
         <React.Fragment>
           <TotalAmount total={cartState.total} />
-          <button onClick={handleRemoveAll}>Xóa Tất cả</button>
+          <div className="btn">
+            <button className="btn-clear" onClick={handleRemoveAll}>
+              Xóa Tất cả
+            </button>
+          </div>
         </React.Fragment>
       )}
     </div>
