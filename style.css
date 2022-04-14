@@ -76,7 +76,12 @@ h6 {
 }
 .cart {
   padding-top: 20px;
-  max-width: 700px;
+  max-width: 800px;
+  margin: auto;
+}
+h4 {
+  max-width: 800px;
+  margin: auto;
 }
 .total-amount {
   position: absolute;
